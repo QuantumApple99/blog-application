@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "scratch-angular-app": {
+    "weblog": {
       "projectType": "application",
       "schematics": {},
       "root": "",
@@ -13,7 +13,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:application",
           "options": {
-            "outputPath": "dist/scratch-angular-app",
+            "outputPath": "dist/weblog",
             "index": "src/index.html",
             "browser": "src/main.ts",
             "polyfills": [
@@ -31,10 +31,13 @@
             ],
             "scripts": [],
             "server": "src/main.server.ts",
-            "prerender": true,
+            "prerender": false,
             "ssr": {
               "entry": "server.ts"
-            }
+            },
+            "externalDependencies": [
+              "better-sqlite3"
+            ]
           },
           "configurations": {
             "production": {
@@ -62,12 +65,15 @@
         },
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
+          "options": {
+            "proxyConfig": "proxy.conf.json"
+          },
           "configurations": {
             "production": {
-              "buildTarget": "scratch-angular-app:build:production"
+              "buildTarget": "weblog:build:production"
             },
             "development": {
-              "buildTarget": "scratch-angular-app:build:development"
+              "buildTarget": "weblog:build:development"
             }
           },
           "defaultConfiguration": "development"

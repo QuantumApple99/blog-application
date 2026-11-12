@@ -1,0 +1,2 @@
+:host { display: block; }
+.load-error, .load-empty { padding: var(--space-4, 16px) 0; }

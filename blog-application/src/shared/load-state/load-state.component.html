@@ -1,0 +1,22 @@
+@switch (state()) {
+  @case ('loading') {
+    <p class="muted" role="status">Loading…</p>
+  }
+  @case ('error') {
+    <div class="load-error" role="alert">
+      <p>{{ errorMessage() || 'Something went wrong.' }}</p>
+      <button class="btn" type="button" (click)="retry.emit()">Retry</button>
+    </div>
+  }
+  @case ('empty') {
+    <div class="load-empty">
+      <p class="muted">{{ emptyMessage() || 'Nothing here yet.' }}</p>
+      @if (emptyActionLabel() && emptyActionLink()) {
+        <a class="btn btn-primary" [routerLink]="emptyActionLink()">{{ emptyActionLabel() }}</a>
+      }
+    </div>
+  }
+  @default {
+    <ng-content />
+  }
+}

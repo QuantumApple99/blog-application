@@ -1,0 +1,68 @@
+@if (notFound()) {
+  <app-not-found-view />
+} @else {
+  <app-load-state [state]="state()" [errorMessage]="errorMessage()" (retry)="reload()">
+    @if (user(); as u) {
+      <section class="stack">
+        <header class="profile stack">
+          <h1 class="page-title">{{ u.displayName }}</h1>
+          <p class="muted handle">&#64;{{ u.username }}</p>
+          @if (u.bio) {
+            <p class="bio">{{ u.bio }}</p>
+          } @else {
+            <p class="muted">No bio yet.</p>
+          }
+          @if (isOwner()) {
+            @if (!editing()) {
+              <div class="actions">
+                <button class="btn" type="button" (click)="startEdit()">Edit profile</button>
+              </div>
+            } @else {
+              <form class="card" [formGroup]="form" (ngSubmit)="save()" novalidate>
+                @if (banner(); as b) {
+                  <p class="field-error" role="alert">{{ b }}</p>
+                }
+                <div class="field">
+                  <label for="profile-displayName">Display name</label>
+                  <input id="profile-displayName" type="text" formControlName="displayName" />
+                  @if (fieldError('displayName'); as e) {
+                    <p class="field-error">{{ e }}</p>
+                  }
+                </div>
+                <div class="field">
+                  <label for="profile-bio">Bio</label>
+                  <textarea id="profile-bio" rows="4" formControlName="bio"></textarea>
+                  @if (fieldError('bio'); as e) {
+                    <p class="field-error">{{ e }}</p>
+                  }
+                </div>
+                <div class="actions">
+                  <button class="btn btn-primary" type="submit" [disabled]="saving() || form.invalid">
+                    {{ saving() ? 'Saving…' : 'Save' }}
+                  </button>
+                  <button class="btn" type="button" (click)="cancel()">Cancel</button>
+                </div>
+              </form>
+            }
+          }
+        </header>
+
+        @if (items().length) {
+          <div class="stack">
+            @for (p of items(); track p.id) {
+              <app-post-card [post]="p" />
+            }
+          </div>
+          <app-pagination [page]="pageNum()" [totalPages]="totalPages()" />
+        } @else {
+          <div class="empty">
+            <p class="muted">{{ emptyMessage() }}</p>
+            @if (pageNum() > 1) {
+              <a class="btn btn-primary" [routerLink]="[]" [queryParams]="{ page: 1 }">Go to page 1</a>
+            }
+          </div>
+        }
+      </section>
+    }
+  </app-load-state>
+}

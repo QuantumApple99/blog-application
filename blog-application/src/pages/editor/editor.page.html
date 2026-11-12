@@ -1,0 +1,58 @@
+<div class="container">
+  @if (notFound()) {
+    <app-not-found-view />
+  } @else {
+    <h1 class="page-title">{{ isEdit() ? 'Edit post' : 'New post' }}</h1>
+    <app-load-state
+      [state]="state()"
+      [errorMessage]="errorMessage()"
+      (retry)="reload()"
+    >
+      <form [formGroup]="form" (ngSubmit)="save()" class="stack" novalidate>
+        @if (banner(); as b) {
+          <p class="field-error" role="alert">{{ b }}</p>
+        }
+
+        <div class="field">
+          <label for="title">Title</label>
+          <input id="title" type="text" formControlName="title" />
+          @if (fieldError('title'); as e) {
+            <p class="field-error">{{ e }}</p>
+          }
+        </div>
+
+        <div class="field">
+          <label for="body">Body</label>
+          <textarea id="body" rows="12" formControlName="body"></textarea>
+          <p class="muted">Markdown is supported. It is rendered on the server.</p>
+          @if (fieldError('body'); as e) {
+            <p class="field-error">{{ e }}</p>
+          }
+        </div>
+
+        <div class="field">
+          <label for="status">Status</label>
+          <select id="status" formControlName="status">
+            <option value="draft">Draft</option>
+            <option value="published">Published</option>
+          </select>
+          @if (fieldError('status'); as e) {
+            <p class="field-error">{{ e }}</p>
+          }
+        </div>
+
+        <div class="actions">
+          <button class="btn btn-primary" type="submit" [disabled]="saving() || form.invalid || deleting()">
+            {{ saving() ? 'Saving…' : 'Save' }}
+          </button>
+          <a class="btn" routerLink="/me/posts">Cancel</a>
+          @if (isEdit()) {
+            <button class="btn btn-danger" type="button" [disabled]="deleting() || saving()" (click)="remove()">
+              Delete
+            </button>
+          }
+        </div>
+      </form>
+    </app-load-state>
+  }
+</div>

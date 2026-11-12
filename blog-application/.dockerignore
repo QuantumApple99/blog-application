@@ -1,0 +1,15 @@
+node_modules
+dist
+.angular
+coverage
+data
+*.db
+*.db-wal
+*.db-shm
+.env
+.git
+.org
+npm-debug.log*
+Dockerfile
+docker-compose.yml
+README.md
