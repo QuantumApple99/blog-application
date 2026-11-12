@@ -58,7 +58,7 @@ _Last updated: 2026-11-12 (sprint 2026-11-12-usable-product, closed)_
 ## Sprint index
 | Date | Sprint | Outcome | Folder |
 |---|---|---|---|
-| 2026-11-12 | Make it a usable product (Large, Mode A) | ✅ shipped to branch sprint/usable-product (not pushed); 12/12 criteria, Docker unverified | sprints/2026-11-12-usable-product |
+| 2026-11-12 | Make it a usable product (Large, Mode A) | ✅ shipped to branch sprint/usable-product (pushed to origin 2026-11-12; PR opened); 12/12 criteria, Docker unverified | sprints/2026-11-12-usable-product |
 
 ## Backlog (from sprint 2026-11-12 review, deferred)
 - Require JSON content-type or a custom header on ALL mutating requests incl. bodyless (logout CSRF from sibling subdomains).
