@@ -1,0 +1,20 @@
+# Decisions
+- 2026-11-12 [stakeholder] All kickoff decisions in brief.md.
+- 2026-11-12 [ceo] Repo had no .gitignore; added one at repo root (node_modules, dist, .angular, coverage, *.db, data/, .env). Delivery may extend it.
+- 2026-11-12 [ceo] Test stack: API tests use node:test + supertest; Angular specs via Karma ChromeHeadless; a single `npm test` script runs both.
+- 2026-11-12 [ceo] Reconciled vp-platform API contract with vp-product needs (see contracts.md "Reconciliation"). The API section wins on naming.
+- 2026-11-12 [ceo] bcryptjs over native bcrypt (avoids native build pain in SSR bundle/Docker). Deps installed centrally by CEO to prevent package.json conflicts between parallel teams.
+- 2026-11-12 [ceo] Created src/ssr-request.token.ts so server.ts (delivery) and the interceptor (web) share one definition without sequencing.
+- 2026-11-12 [ceo, resolving md-api vs md-identity] /api/users/:username/posts uses md-api's shared `listPublishedPostsByAuthor(db, authorId, page)` + `parsePage(query)` exported from api/posts/index.ts (one serializer for all post lists). mgr-auth must NOT write its own posts query; until WP3 lands it may use a temporary seam but must switch before handback.
+- 2026-11-12 [ceo] ApiError constructor is exactly `new ApiError(status, code, message, fields?)`; static helpers (validation/unauthenticated/forbidden/notFound) are additions.
+- 2026-11-12 [ceo] JSON content-type guard + /api/health live in api/index.ts (md-api).
+- 2026-11-12 [ceo] Approved mgr-delivery's calls: dev proxy.conf.json (/api→:4000); angular.json prerender=false; npm install-scripts approvals for better-sqlite3 + esbuild in package.json; Docker runtime = dist + prod node_modules; Docker seeding via compose profile "tools" service "seed" (target build).
+- 2026-11-12 [ceo] Static handler in server.ts uses index:false so "/" goes through SSR.
+- 2026-11-12 [ceo] Amended mgr-auth's eng brief: no own posts SQL (use api/posts shared helpers via one seam module); env access via bracket notation (strict tsconfig).
+- 2026-11-12 [eng-data-layer, accepted by ceo] Oversize body → 400 VALIDATION "Request body too large"; excerpt decodes entities once (plain-text `<` may appear; never rendered as HTML).
+- 2026-11-12 [eng-posts-api, accepted by ceo] api/posts/page.ts holds parsePage; posts routes import requireAuth from ../auth/middleware to avoid an import cycle (auth/index → users → posts → routes → auth). totalPages=0 for empty lists.
+- 2026-11-12 [ceo, on md-api rework] renderMarkdown drops non-absolute-http(s) img (whole <img> removed) and strips non http/https/mailto hrefs (text kept), incl. #fragment links. Accepted: matches contract allowlist. api suite 193/193.
+- 2026-11-12 [md-identity] Accepted: signup clears incoming sid; empty login fields → 400; bio not trimmed; /users/:u/posts 404 before 400; PATCH no-keys → 400 fields.displayName.
+- 2026-11-12 [ceo] Inline text links (post titles, author names, login/signup cross-links) may be <40px tall; the ≥40px rule applies to controls (buttons, inputs, nav items). Not-found pages keep HTTP 200 (contract nice-to-have; follow-up).
+- 2026-11-12 [ceo, production check] Fresh-eyes review: no critical/high. FIX NOW: M1 SSR transfer-cache key mismatch (eng-routing-shell, frontend files only); L2 SSR HTML Cache-Control private,no-store + Vary: Cookie, L4 purgeExpired at startup + hourly, L7 Docker seed ownership (eng-delivery); L8 huge ?page clamp (eng-reader, eng-editor). DEFER to sprint 2: L3 bodyless-logout CSRF from sibling subdomains (needs header policy), L5 draft existence leak via 403/slug suffix (contract order), L6 rate limiting (out of scope), L9 real 404 status (nice-to-have).
+- 2026-11-12 [ceo] Re-review HIGH: SSR derived API origin from client Host header → logged-out SSR under real domains + SSRF/content injection via forged Host. Fix: SsrApiBackend routes every /api/ path to the internal SSR origin regardless of host; cookie only to internal origin. Owner eng-routing-shell. Lesson: localhost-only testing hides Host-derived bugs; test SSR with a foreign Host header.

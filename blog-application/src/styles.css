@@ -1,1 +1,75 @@
-/* You can add global styles to this file, and also import other style files */
+:root {
+  --color-bg: #ffffff;
+  --color-surface: #f7f7f8;
+  --color-text: #1b1b1f;
+  --color-muted: #5f6368;
+  --color-border: #d9dbe0;
+  --color-primary: #2457d6;
+  --color-primary-text: #ffffff;
+  --color-danger: #b3261e;
+  --color-danger-text: #ffffff;
+  --color-badge-bg: #fff3cd;
+  --color-badge-text: #7a5600;
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 24px;
+  --space-6: 32px;
+  --radius: 8px;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+
+html, body { margin: 0; }
+body {
+  overflow-x: hidden;
+  background: var(--color-bg);
+  color: var(--color-text);
+  font-family: system-ui, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif;
+  line-height: 1.5;
+}
+
+a { color: var(--color-primary); }
+
+.container { max-width: 720px; margin-inline: auto; padding: 16px; }
+
+input, select, textarea, button { font: inherit; min-height: 40px; }
+input, select, textarea {
+  padding: var(--space-2) var(--space-3);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  background: var(--color-bg);
+  color: inherit;
+  max-width: 100%;
+}
+textarea { width: 100%; resize: vertical; }
+
+.btn {
+  display: inline-flex; align-items: center; justify-content: center;
+  min-height: 40px; padding: 0 var(--space-4);
+  border: 1px solid var(--color-border); border-radius: var(--radius);
+  background: var(--color-surface); color: var(--color-text);
+  text-decoration: none; cursor: pointer;
+}
+.btn:disabled { opacity: 0.6; cursor: not-allowed; }
+.btn-primary { background: var(--color-primary); border-color: var(--color-primary); color: var(--color-primary-text); }
+.btn-danger { background: var(--color-danger); border-color: var(--color-danger); color: var(--color-danger-text); }
+.btn-link { background: none; border-color: transparent; color: var(--color-primary); text-decoration: underline; }
+
+.field { display: flex; flex-direction: column; gap: var(--space-1); margin-bottom: var(--space-4); }
+.field label { font-weight: 600; }
+.field-error { color: var(--color-danger); font-size: 0.875rem; margin: 0; }
+
+.badge { display: inline-block; padding: 2px var(--space-2); border-radius: 999px; font-size: 0.75rem; background: var(--color-surface); border: 1px solid var(--color-border); }
+.badge-draft { background: var(--color-badge-bg); color: var(--color-badge-text); border-color: var(--color-badge-text); }
+
+.card { padding: var(--space-4); border: 1px solid var(--color-border); border-radius: var(--radius); background: var(--color-bg); }
+.page-title { font-size: 1.75rem; margin: 0 0 var(--space-4); overflow-wrap: anywhere; }
+.muted { color: var(--color-muted); }
+.stack { display: flex; flex-direction: column; gap: var(--space-4); }
+
+.post-body { overflow-wrap: anywhere; }
+.post-body img { max-width: 100%; height: auto; }
+.post-body pre { max-width: 100%; overflow-x: auto; }
+.post-body table { display: block; max-width: 100%; overflow-x: auto; }

@@ -1,4 +1,17 @@
-<img src="" alt="">
-<span class="displaytext">
-    <b>WeBlog</b>
-</span>
+<header class="site-header">
+  <a class="logo" routerLink="/"><span class="displaytext"><b>WeBlog</b></span></a>
+  <nav aria-label="Main">
+    <ul class="nav-list">
+      <li><a class="nav-item" routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">Home</a></li>
+      @if (auth.currentUser(); as user) {
+        <li><a class="nav-item" routerLink="/me/posts/new" routerLinkActive="active">Write</a></li>
+        <li><a class="nav-item" routerLink="/me/posts" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">My posts</a></li>
+        <li><a class="nav-item" [routerLink]="['/u', user.username]" routerLinkActive="active">Profile</a></li>
+        <li><button class="nav-item nav-button" type="button" (click)="logout()">Logout</button></li>
+      } @else {
+        <li><a class="nav-item" routerLink="/login" routerLinkActive="active">Login</a></li>
+        <li><a class="nav-item" routerLink="/signup" routerLinkActive="active">Signup</a></li>
+      }
+    </ul>
+  </nav>
+</header>

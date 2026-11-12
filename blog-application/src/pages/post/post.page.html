@@ -1,0 +1,28 @@
+@if (notFound()) {
+  <app-not-found-view />
+} @else {
+  <app-load-state [state]="state()" [errorMessage]="errorMessage()" (retry)="reload()">
+    @if (post(); as p) {
+      <article class="stack">
+        <h1 class="page-title">{{ p.title }}</h1>
+        <p class="byline muted">
+          By <a [routerLink]="['/u', p.author.username]">{{ p.author.displayName }}</a>
+          · {{ p.publishedAt ?? p.createdAt | date: 'mediumDate' }}
+          @if (p.status === 'draft') {
+            <span class="badge badge-draft">Draft</span>
+          }
+        </p>
+        @if (isOwner()) {
+          <div class="actions">
+            <a class="btn" [routerLink]="['/me/posts', p.slug, 'edit']">Edit</a>
+            <button class="btn btn-danger" type="button" [disabled]="deleting()" (click)="remove()">Delete</button>
+          </div>
+          @if (deleteError(); as err) {
+            <p class="field-error" role="alert">{{ err }}</p>
+          }
+        }
+        <div class="post-body" [innerHTML]="p.html"></div>
+      </article>
+    }
+  </app-load-state>
+}

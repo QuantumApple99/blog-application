@@ -1,0 +1,50 @@
+<div class="container">
+  <div class="head">
+    <h1 class="page-title">My posts</h1>
+    <a class="btn btn-primary" routerLink="/me/posts/new">New post</a>
+  </div>
+
+  @if (deleteError(); as msg) {
+    <p class="field-error" role="alert">{{ msg }}</p>
+  }
+
+  <app-load-state
+    [state]="state()"
+    [errorMessage]="errorMessage()"
+    [emptyMessage]="emptyMessage()"
+    [emptyActionLabel]="pageNum() > 1 ? 'Go to page 1' : 'Write one'"
+    [emptyActionLink]="pageNum() > 1 ? '/me/posts' : '/me/posts/new'"
+    (retry)="retry()"
+  >
+    <div class="stack">
+      @for (post of items(); track post.id) {
+        <div class="card stack">
+          <h2 class="row-title">{{ post.title }}</h2>
+          <div>
+            @if (post.status === 'draft') {
+              <span class="badge badge-draft">Draft</span>
+            } @else {
+              <span class="badge">Published</span>
+            }
+          </div>
+          <span class="muted">{{ post.updatedAt | date: 'medium' }}</span>
+          <div class="actions">
+            <a class="btn" [routerLink]="['/me/posts', post.slug, 'edit']">Edit</a>
+            @if (post.status === 'published') {
+              <a class="btn" [routerLink]="['/posts', post.slug]">View</a>
+            }
+            <button
+              class="btn btn-danger"
+              type="button"
+              [disabled]="deleting() === post.slug"
+              (click)="remove(post)"
+            >
+              Delete
+            </button>
+          </div>
+        </div>
+      }
+    </div>
+    <app-pagination [page]="pageNum()" [totalPages]="totalPages()" />
+  </app-load-state>
+</div>

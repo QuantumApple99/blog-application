@@ -1,0 +1,23 @@
+services:
+  app:
+    build: .
+    ports: ["${PORT:-4000}:4000"]
+    environment:
+      NODE_ENV: production
+      PORT: "4000"
+      DATABASE_PATH: /data/weblog.db
+      COOKIE_SECURE: "${COOKIE_SECURE:-false}"
+      BCRYPT_ROUNDS: "${BCRYPT_ROUNDS:-12}"
+    volumes: ["weblog-data:/data"]
+    restart: unless-stopped
+  seed:
+    build: {context: ., target: build}
+    profiles: ["tools"]
+    user: node
+    command: ["npx", "tsx", "scripts/seed.ts"]
+    environment:
+      DATABASE_PATH: /data/weblog.db
+      BCRYPT_ROUNDS: "${BCRYPT_ROUNDS:-12}"
+    volumes: ["weblog-data:/data"]
+volumes:
+  weblog-data:
